@@ -1,7 +1,7 @@
 "use client";
 
 import { X } from "lucide-react";
-import BalanceDisplay from "./BalanceDisplay";
+import { ConnectButton } from '@rainbow-me/rainbowkit';
 import { ThemeToggle } from "./ThemeToggle";
 import { LanguageSwitcher } from "./LanguageSwitcher";
 import { useTranslation } from 'react-i18next';
@@ -13,20 +13,10 @@ const NAV_LINKS = [
 ];
 
 export default function MobileNav({
-  isConnected,
   isMobileMenuOpen,
-  address,
-  disconnect,
-  shortenAddress,
-  onConnectWallet,
   onClose,
 }: {
-  isConnected: boolean;
   isMobileMenuOpen: boolean;
-  address?: string;
-  disconnect: () => void;
-  shortenAddress: (address: string) => string;
-  onConnectWallet: () => void;
   onClose: () => void;
 }) {
   const { t } = useTranslation();
@@ -84,30 +74,7 @@ export default function MobileNav({
           </div>
         </div>
         <div className="mt-4 border-t border-gray-200 pt-4 dark:border-gray-800">
-          {isConnected && address ? (
-            <div className="flex flex-col gap-3">
-              <BalanceDisplay />
-
-              <button
-                type="button"
-                onClick={() => {
-                  disconnect();
-                  onClose();
-                }}
-                className="btn-outline w-full"
-              >
-                {t('common.disconnect')} {shortenAddress(address)}
-              </button>
-            </div>
-          ) : (
-            <button
-              type="button"
-              onClick={onConnectWallet}
-              className="btn w-full"
-            >
-              {t('common.connectWallet')}
-            </button>
-          )}
+          <ConnectButton />
         </div>
       </div>
     </div>

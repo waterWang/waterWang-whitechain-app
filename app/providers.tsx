@@ -2,6 +2,8 @@
 
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { WagmiProvider } from 'wagmi';
+import { RainbowKitProvider } from '@rainbow-me/rainbowkit';
+import { darkTheme } from '@rainbow-me/rainbowkit';
 import { Toaster } from 'sonner';
 import { useState } from 'react';
 import { wagmiConfig } from '@/lib/wagmi';
@@ -23,14 +25,21 @@ export function Providers({ children }: { children: React.ReactNode }) {
   return (
     <WagmiProvider config={wagmiConfig}>
       <QueryClientProvider client={queryClient}>
-        <BlockchainDataSync />
-        <MempoolProvider>
-          {/* PluginSDKProvider must be inside WagmiProvider + QueryClientProvider
-              so wallet hooks are available to the plugin bridge. */}
-          <PluginSDKProvider>
-            <I18nProvider>{children}</I18nProvider>
-          </PluginSDKProvider>
-        </MempoolProvider>
+        <RainbowKitProvider
+          theme={darkTheme()}
+          appInfo={{
+            appName: process.env.NEXT_PUBLIC_APP_NAME ?? 'WhiteChain'
+          }}
+        >
+          <BlockchainDataSync />
+          <MempoolProvider>
+            {/* PluginSDKProvider must be inside WagmiProvider + QueryClientProvider
+                so wallet hooks are available to the plugin bridge. */}
+            <PluginSDKProvider>
+              <I18nProvider>{children}</I18nProvider>
+            </PluginSDKProvider>
+          </MempoolProvider>
+        </RainbowKitProvider>
       </QueryClientProvider>
       <Toaster richColors position="bottom-right" closeButton />
     </WagmiProvider>
